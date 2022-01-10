@@ -13,7 +13,7 @@ cyan, magenta, yellow = (20, 230, 230), (230, 20, 230), (230, 230, 20)
 width, height = 721, 721
 fps = 60
 clear = False
-image = pygame.image.load(r'.//textue_rot-60.png')
+image = pygame.image.load(r'.//texture-60.bmp')
 
 
 #scan/drawing line ... with DDA (Digital Differential Analyzer
@@ -94,7 +94,7 @@ y3 = int(y0 + r*math.sin(angle5) +0.5)
 list2 = scanline(x0,y0,x3,y3)
 print((list1,list2))
 for i in range(len(list1)):
-    drawline(screen,list1[i][0]-1,list1[i][1],list2[i][0],list2[i][1],black)
+    drawline(screen,list1[i][0]-1,list1[i][1],list2[i][0],list2[i][1],blue)
 pygame.display.update()
 time.sleep(5)
     
@@ -110,9 +110,12 @@ cv2.imshow("2x Horizontal Stretching", warped_img)
 cv2.waitKey(5000)
 cv2.destroyAllWindows()
 
-img = cv2.imread('texture.png')
+pygame.image.save(screen, "texture.bmp")
+
+img = cv2.imread('texture.bmp')
 rot_img = rotate_image(img, -60)
 cv2.imshow("Image Left Rotation", rot_img)
+cv2.imwrite('texture-60.bmp',rot_img)
 cv2.waitKey(5000)
 cv2.destroyAllWindows()
 
