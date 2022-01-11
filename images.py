@@ -10,9 +10,9 @@ os.environ["SDL_VIDEO_CENTERED"]='1'
 black, white, blue  = (20, 20, 20), (230, 230, 230), (0, 154, 255)
 green, red  = (20, 250, 20), (250, 20, 20)
 cyan, magenta, yellow = (20, 230, 230), (230, 20, 230), (230, 230, 20)
-width, height = 721, 721
+width, height = 720, 720
 fps = 60
-clear = False
+clear = True
 image = pygame.image.load(r'.//texture-60.bmp')
 
 
@@ -26,8 +26,7 @@ def scanline(x1,y1,x2,y2):
     else: d = dy
     if d == 0: 
         print("zero line!!!")
-        pygame.quit()
-        exit()
+        return([(x2,y2)])
     #print(d)
     dx = float(x2 - x1) / d
     dy = float(y2 - y1) / d
@@ -60,7 +59,8 @@ pygame.init()
 pygame.display.set_caption("Image Drawing Board")
 screen = pygame.display.set_mode((width, height))
 if clear==False: 
-    screen.blit(image, (0, 0))
+    screen.blit(image, (0, 1))  # for -60 deg.
+    #screen.blit(image, (-1, 0))  # for 60 deg.
 else:
     screen.fill(white)
 print("======= Hello opencv images! ========")
@@ -95,9 +95,22 @@ list2 = scanline(x0,y0,x3,y3)
 print((list1,list2))
 for i in range(len(list1)):
     drawline(screen,list1[i][0]-1,list1[i][1],list2[i][0],list2[i][1],blue)
+
+# lower part (1/6) of hexagon 
+angle1 = 1 * (3.14/3)  #180/3=60 degrees
+x4 = int(x0 + r*math.cos(angle1) +0.5)
+y4 = int(y0 + r*math.sin(angle1) +0.5) 
+list3 = scanline(x0,y0,x4,y4)
+angle2 =  2 * (3.14/3)  #180/3=60 degrees
+x5 = int(x0 + r*math.cos(angle2) +0.5)
+y5 = int(y0 + r*math.sin(angle2) +0.5) 
+list4 = scanline(x0,y0,x5,y5)
+print((list3,list4))
+for i in range(len(list3)):
+    drawline(screen,list3[i][0]-1,list3[i][1],list4[i][0],list4[i][1],red)
 pygame.display.update()
 time.sleep(5)
-    
+
 
 img = cv2.imread('lena.png')
 cv2.imshow("Lena original", img)
@@ -114,8 +127,15 @@ pygame.image.save(screen, "texture.bmp")
 
 img = cv2.imread('texture.bmp')
 rot_img = rotate_image(img, -60)
-cv2.imshow("Image Left Rotation", rot_img)
+cv2.imshow("Image Right Rotation -60 deg.)", rot_img)
 cv2.imwrite('texture-60.bmp',rot_img)
+cv2.waitKey(5000)
+cv2.destroyAllWindows()
+
+img = cv2.imread('texture.bmp')
+rot_img = rotate_image(img, 60)
+cv2.imshow("Image Left Rotation 60 deg.", rot_img)
+cv2.imwrite('texture60.bmp',rot_img)
 cv2.waitKey(5000)
 cv2.destroyAllWindows()
 
